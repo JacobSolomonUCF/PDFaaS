@@ -1,20 +1,5 @@
-# sam-app
-
-This is a sample template for sam-app - Below is a brief explanation of what we have generated for you:
-
-```bash
-.
-├── README.MD                   <-- This instructions file
-├── event.json                  <-- API Gateway Proxy Integration event payload
-├── hello_world                 <-- Source code for a lambda function
-│   └── app.js                  <-- Lambda function code
-│   └── package.json            <-- NodeJS dependencies and scripts
-│   └── tests                   <-- Unit tests
-│       └── unit
-│           └── test-handler.js
-├── template.yaml               <-- SAM template
-```
-
+# PDF as a Service
+ PDF & IMGs as a Service
 ## Requirements
 
 * AWS CLI already configured with Administrator permission
