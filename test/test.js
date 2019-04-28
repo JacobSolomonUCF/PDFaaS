@@ -1,15 +1,23 @@
 var request = require("request");
+var fs = require("fs");
 
-const host = "http://localhost:3000/";
-//http://127.0.0.1:3000/url/to/img
-var options = { method: 'GET',
-  url: host + 'url/to/img',
+var options = { method: 'POST',
+  url: 'http://127.0.0.1:3000/url/to/img',
   headers:
-    {'cache-control': 'no-cache' }
-};
+    { 'Content-Type': 'application/json' },
+  body: { html: '', url: 'https://www.google.com' },
+  json: true };
 
-request(options, function (error, response, body) {
+request.post(options, function (error, response, body) {
   if (error) throw new Error(error);
 
-  console.log(body);
+  fs.writeFile("output/urlToImg.jpeg", response.body.content, 'base64',
+    function(err) {
+      if (err) {
+        console.log('err', err);
+      }
+      console.log('success');
+    });
+  console.log('inside');
 });
+
