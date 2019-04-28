@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "chrome-aws-lambda": "^1.14.0",
+    "puppeteer-core": "^1.14.0"
+  }
+}

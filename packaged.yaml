@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'PDFaas
+
+  PDF and IMGs as a service
+
+  '
+Globals:
+  Function:
+    Timeout: 45
+Resources:
+  ChromeLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: chromium-service-dependencies
+      Description: Dependencies for PDFaaS
+      ContentUri: s3://lambda.things/5ee94d1320e93ccc5ac8a7aa7732a5c5
+      CompatibleRuntimes:
+      - nodejs8.10
+      LicenseInfo: MIT
+      RetentionPolicy: Retain
+  HTML2PDFLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://lambda.things/c4bee5a410b9f38848369ee8501fe2bd
+      Handler: pdf.pdfHandler
+      Runtime: nodejs8.10
+      MemorySize: 1024
+      Events:
+        PDFaasAPI:
+          Type: Api
+          Properties:
+            Path: /html/to/pdf
+            Method: get
+  URL2PDFLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://lambda.things/c4bee5a410b9f38848369ee8501fe2bd
+      Handler: pdf.pdfHandler
+      Runtime: nodejs8.10
+      MemorySize: 1024
+      Events:
+        PDFaasAPI:
+          Type: Api
+          Properties:
+            Path: /url/to/pdf
+            Method: get
+  HTML2IMGLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://lambda.things/a9a369007216dbb3aec283cd6d9aca76
+      Handler: img.imgHandler
+      Runtime: nodejs8.10
+      MemorySize: 1024
+      Events:
+        PDFaasAPI:
+          Type: Api
+          Properties:
+            Path: /html/to/img
+            Method: get
+  URL2IMGLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://lambda.things/a9a369007216dbb3aec283cd6d9aca76
+      Handler: img.imgHandler
+      Runtime: nodejs8.10
+      MemorySize: 1024
+      Layers:
+      - Ref: ChromeLayer
+      Events:
+        PDFaasAPI:
+          Type: Api
+          Properties:
+            Path: /url/to/img
+            Method: get
+Outputs:
+  PDFaasApi:
+    Description: API Gateway endpoint URL for Prod stage for Hello World function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/test
+  URL2IMGLambda:
+    Description: URL -> IMG
+    Value:
+      Fn::GetAtt:
+      - URL2IMGLambda
+      - Arn
+  HTML2IMGLambda:
+    Description: HTML -> IMG
+    Value:
+      Fn::GetAtt:
+      - URL2IMGLambda
+      - Arn
+  HTML2PDFLambda:
+    Description: HTML -> PDF
+    Value:
+      Fn::GetAtt:
+      - URL2IMGLambda
+      - Arn
+  URL2PDFLambda:
+    Description: URL -> IMG
+    Value:
+      Fn::GetAtt:
+      - URL2IMGLambda
+      - Arn

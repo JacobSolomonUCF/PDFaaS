@@ -119,7 +119,7 @@ Here are a few things you can try to get more acquainted with building serverles
 
 ### Learn how SAM Build can help you with dependencies
 
-* Uncomment lines on `app.js`
+* Uncomment lines on `chromium.js`
 * Build the project with ``sam build --use-container``
 * Invoke with ``sam local invoke HelloWorldFunction --event event.json``
 * Update tests

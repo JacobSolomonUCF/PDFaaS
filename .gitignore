@@ -7,4 +7,6 @@
 .aws-sam/
 
 # Packages
-service/node_modules/
+service/dependencies/nodejs/node_modules/*
+!service/dependencies/nodejs/node_modules/chromiumBase.js
+test/node_modules/

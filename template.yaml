@@ -11,18 +11,69 @@ Globals:
     Timeout: 45
 
 Resources:
-  PDFaas:
+  ChromeLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: chromium-service-dependencies
+      Description: Dependencies for PDFaaS
+      ContentUri: service/dependencies/
+      CompatibleRuntimes:
+        - nodejs8.10
+      LicenseInfo: 'MIT'
+      RetentionPolicy: Retain
+  HTML2PDFLambda:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: service/
-      Handler: app.lambdaHandler
+      CodeUri: service/pdf
+      Handler: pdf.pdfHandler
       Runtime: nodejs8.10
       MemorySize: 1024
       Events:
         PDFaasAPI:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /hello
+            Path: /html/to/pdf
+            Method: get
+  URL2PDFLambda:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: service/pdf
+      Handler: pdf.pdfHandler
+      Runtime: nodejs8.10
+      MemorySize: 1024
+      Events:
+        PDFaasAPI:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /url/to/pdf
+            Method: get
+  HTML2IMGLambda:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: service/img
+      Handler: img.imgHandler
+      Runtime: nodejs8.10
+      MemorySize: 1024
+      Events:
+        PDFaasAPI:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /html/to/img
+            Method: get
+  URL2IMGLambda:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: service/img
+      Handler: img.imgHandler
+      Runtime: nodejs8.10
+      MemorySize: 1024
+      Layers:
+        - !Ref ChromeLayer
+      Events:
+        PDFaasAPI:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /url/to/img
             Method: get
 
 Outputs:
@@ -31,10 +82,16 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   PDFaasApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  PDFaas:
-    Description: "PDF and IMGs as a service"
-    Value: !GetAtt PDFaas.Arn
-  PDFaasIamRole:
-    Description: "Implicit IAM Role created for PDFaas"
-    Value: !GetAtt PDFaasRole.Arn
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/test"
+  URL2IMGLambda:
+    Description: "URL -> IMG"
+    Value: !GetAtt URL2IMGLambda.Arn
+  HTML2IMGLambda:
+    Description: "HTML -> IMG"
+    Value: !GetAtt URL2IMGLambda.Arn
+  HTML2PDFLambda:
+    Description: "HTML -> PDF"
+    Value: !GetAtt URL2IMGLambda.Arn
+  URL2PDFLambda:
+    Description: "URL -> IMG"
+    Value: !GetAtt URL2IMGLambda.Arn
