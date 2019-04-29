@@ -32,7 +32,7 @@ request.post(urlToPdfOptions, function (error, response, body) {
   if (error) throw new Error(error);
 
   console.log(response.body.content.data);
-  fs.writeFileSync("output/urlToPdf.pdf", response.body.content.data,
+  fs.writeFile("output/urlToPdf.pdf",new Buffer(response.body.content.data),
     function(err) {
       if (err) {
         console.log('err', err);
