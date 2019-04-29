@@ -1,4 +1,23 @@
-const { openBrowser, loadPage, getScreenshot } = require("chromiumBase");
+const { openBrowser, loadPage } = require("chromiumBase");
+
+/**
+ *
+ * @param page: <Page>
+ *
+ * @returns screenshot
+ */
+const getScreenshot = async (page) => {
+  const options = {
+    type: 'jpeg',
+    encoding: 'base64'
+  };
+
+  console.log("Generate Image...");
+  const img = await page.screenshot(options);
+
+  return img;
+};
+
 /*
 
 {

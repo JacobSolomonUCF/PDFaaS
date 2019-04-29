@@ -28,12 +28,14 @@ Resources:
       Handler: pdf.pdfHandler
       Runtime: nodejs8.10
       MemorySize: 1024
+      Layers:
+        - !Ref ChromeLayer
       Events:
         PDFaasAPI:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /html/to/pdf
-            Method: get
+            Method: post
   URL2PDFLambda:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -41,12 +43,14 @@ Resources:
       Handler: pdf.pdfHandler
       Runtime: nodejs8.10
       MemorySize: 1024
+      Layers:
+        - !Ref ChromeLayer
       Events:
         PDFaasAPI:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /url/to/pdf
-            Method: get
+            Method: post
   HTML2IMGLambda:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -54,12 +58,14 @@ Resources:
       Handler: img.imgHandler
       Runtime: nodejs8.10
       MemorySize: 1024
+      Layers:
+        - !Ref ChromeLayer
       Events:
         PDFaasAPI:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /html/to/img
-            Method: get
+            Method: post
   URL2IMGLambda:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
